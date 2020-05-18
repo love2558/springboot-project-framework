@@ -1,2 +1,16 @@
-# springboot-project-framework
-a simple springboot project framework
+
+## 项目介绍
+
+此项目是springboot web项目基本骨架
+包含：
+1.参数校验
+2.统一的异常处理
+3.统一的返回值结构
+
+
+
+TODO
+1.resultVO改造下
+2.异常处理调整下
+3.引入数据库依赖
+4.配置文件整下

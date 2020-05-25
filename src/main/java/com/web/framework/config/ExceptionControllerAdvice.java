@@ -19,7 +19,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(APIException.class)
     public ResultVO<Object> APIExceptionHandler(APIException e) {
-        return new ResultVO<>().fail(e);
+        return new ResultVO.ResultGenerator<>().genFailResult(e);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -37,11 +37,11 @@ public class ExceptionControllerAdvice {
 
         // 有注解的话就返回注解的响应信息
         if (annotation != null) {
-            return new ResultVO<>(annotation.value(),annotation.message(),defaultMessage);
+            return new ResultVO.ResultGenerator<>().genResult(annotation.value(),annotation.message(),defaultMessage);
         }
 
         // 没有注解就提取错误提示信息进行返回统一错误码
-        return new ResultVO<>().fail(ResultCode.VALIDATE_FAILED);
+        return new ResultVO.ResultGenerator<>().genFailResult(ResultCode.VALIDATE_FAILED);
     }
 
 }

@@ -23,41 +23,40 @@ public class ResultVO<T> {
     /** 数据 */
     private T data;
 
-    public ResultVO(){
+    private ResultVO(){
     }
 
-    public ResultVO(int code, String msg, T data) {
+    private ResultVO(int code,String msg,T data){
         this.code = code;
         this.success = code == ResultCode.SUCCESS.getCode();
         this.msg = msg;
         this.data = data;
-    }
-
-    private ResultVO<T> init(int code, String msg, T data){
-        this.code = code;
-        this.success = code == ResultCode.SUCCESS.getCode();
-        this.msg = msg;
-        this.data = data;
-        return this;
     }
 
     public boolean isSuccess(){
         return success;
     }
 
-    public ResultVO<T> success(T data){
-        return init(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMsg(),data);
-    }
+    public static class ResultGenerator<T> {
 
-    public ResultVO<T> fail(ResultCode code){
-        return init(code.getCode(),code.getMsg(),null);
-    }
+        public ResultVO<T> genSuccessResult(){
+            return new ResultVO<>(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMsg(),null);
+        }
 
-    public ResultVO<T> fail(ResultCode code,T data){
-        return init(code.getCode(),code.getMsg(),data);
-    }
+        public ResultVO<T> genSuccessResult(T data){
+            return new ResultVO<>(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMsg(),data);
+        }
 
-    public ResultVO<T> fail(APIException e){
-        return init(e.getCode(),e.getMsg(),null);
+        public ResultVO<T> genFailResult(ResultCode resultCode){
+            return new ResultVO<>(resultCode.getCode(),resultCode.getMsg(),null);
+        }
+
+        public ResultVO<T> genFailResult(APIException e){
+            return new ResultVO<>(e.getCode(),e.getMsg(),null);
+        }
+
+        public ResultVO<T> genResult(int code,String msg,T data){
+            return new ResultVO<>(code,msg,data);
+        }
     }
 }

@@ -1,9 +1,6 @@
 package com.web.framework.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.framework.annotation.NotResponseBody;
-import com.web.framework.exception.APIException;
 import com.web.framework.vo.ResultVO;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -28,17 +25,7 @@ public class ResponseControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object data, MethodParameter returnType, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest request, ServerHttpResponse response) {
-        // String类型不能直接包装，所以要进行些特别的处理
-        if (returnType.getGenericParameterType().equals(String.class)) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                // 将数据包装在ResultVO里后，再转换为json字符串响应给前端
-                return objectMapper.writeValueAsString(new ResultVO<>().success(data));
-            } catch (JsonProcessingException e) {
-                throw new APIException("返回String类型错误");
-            }
-        }
         // 将原本的数据包装在ResultVO里
-        return new ResultVO<>().success(data);
+        return new ResultVO.ResultGenerator<>().genSuccessResult(data);
     }
 }
